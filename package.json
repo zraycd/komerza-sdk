@@ -1,0 +1,29 @@
+{
+  "name": "komerza-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/tw.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zraycd/komerza-sdk.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zraycd/komerza-sdk/issues"
+  },
+  "homepage": "https://github.com/zraycd/komerza-sdk#readme",
+  "dependencies": {
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.0"
+  }
+}
