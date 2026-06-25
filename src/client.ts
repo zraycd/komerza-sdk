@@ -1,7 +1,17 @@
 import { KomerzaError } from "./errors.js";
 import type { KomerzaErrorCode } from "./errors.js";
+import { StoresResource } from "./resources/stores.js";
 import { UserResource } from "./resources/user.js";
+import { Store } from "./resources/store.js";
+
 type ApiResponse<T> = { success: boolean; message: string | null; code: string | null; data?: T };
+export type Paginated<T> = {
+  success: boolean;
+  message: string | null;
+  code: string | null;
+  pages: number;
+  data: T[];
+};
 
 interface ClientConfig {
   apiKey: string;
@@ -31,10 +41,18 @@ export class KomerzaClient {
   public userAgent: string;
   public baseUrl: string = "https://api.komerza.com";
 
+  private req: Requester;
+  public user: UserResource;
+  public stores: StoresResource;
+
   constructor(config: ClientConfig) {
     this.apiKey = config.apiKey;
     this.userAgent = config.userAgent;
     if (config.baseUrl) this.baseUrl = config.baseUrl;
+
+    this.req = this.request.bind(this);
+    this.user = new UserResource(this.req);
+    this.stores = new StoresResource(this.req);
   }
 
   private async request<T>(path: string, opts: RequestInit = {}) {
@@ -46,6 +64,7 @@ export class KomerzaClient {
           ...opts.headers,
           Authorization: `Bearer ${this.apiKey}`,
           "User-Agent": this.userAgent,
+          "Content-Type": "application/json",
         },
       });
     } catch (cause) {
@@ -79,7 +98,9 @@ export class KomerzaClient {
     }
     return json.data as T;
   }
-  public user = new UserResource(this.request.bind(this));
+  store(storeId: string): Store {
+    return new Store(this.req, storeId);
+  }
 }
 
 export type Requester = <T>(path: string, opts?: RequestInit) => Promise<T>;
