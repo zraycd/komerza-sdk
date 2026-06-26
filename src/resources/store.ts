@@ -2,6 +2,8 @@ import { ProductsResource } from "./products.js";
 import { components } from "../generated/schema.js";
 import { Transport } from "../client.js";
 import { Product } from "./product.js";
+import { Category } from "./category.js";
+import { CategoriesResource } from "./categories.js";
 
 type StoreType = components["schemas"]["PublicStoreReference"];
 type UpdateStoreDto = components["schemas"]["UpdateStoreForm"];
@@ -10,12 +12,14 @@ type MaintenanceModeForm = components["schemas"]["MaintenanceModeForm"];
 
 export class Store {
   public products: ProductsResource;
+  public categories: CategoriesResource;
 
   constructor(
     private t: Transport,
     public readonly storeId: string,
   ) {
     this.products = new ProductsResource(t, storeId);
+    this.categories = new CategoriesResource(t, storeId);
   }
 
   get() {
@@ -39,5 +43,9 @@ export class Store {
 
   product(productId: string): Product {
     return new Product(this.t, this.storeId, productId);
+  }
+
+  category(categoryId: string): Category {
+    return new Category(this.t, this.storeId, categoryId);
   }
 }
