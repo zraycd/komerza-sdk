@@ -1,6 +1,7 @@
 import { ProductsResource } from "./products.js";
 import { components } from "../generated/schema.js";
 import { Transport } from "../client.js";
+import { Product } from "./product.js";
 
 type StoreType = components["schemas"]["PublicStoreReference"];
 type UpdateStoreDto = components["schemas"]["UpdateStoreForm"];
@@ -34,5 +35,9 @@ export class Store {
       method: "PUT",
       body: JSON.stringify(form),
     });
+  }
+
+  product(productId: string): Product {
+    return new Product(this.t, this.storeId, productId);
   }
 }

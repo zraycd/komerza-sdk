@@ -1,20 +1,14 @@
 import type { components } from "../generated/schema.js";
-import type { Paginated, Transport } from "../client.js";
+import type { Transport } from "../client.js";
 
 type Product = components["schemas"]["Product"];
 type DisplayProduct = components["schemas"]["DisplayProduct"];
 type CreateProductForm = components["schemas"]["CreateProductForm"];
 type Privacy = components["schemas"]["Privacy"];
 type PublicProductReference = components["schemas"]["PublicProductReference"];
-type UpdateProductForm = components["schemas"]["UpdateProductForm"];
-type ProductPaymentForm = components["schemas"]["ProductPaymentForm"];
 type BulkUpdateProductForm = components["schemas"]["BulkUpdateProductForm"];
 type OrderedItem = components["schemas"]["OrderedItem"];
-type DuplicateProductForm = components["schemas"]["DuplicateProductForm"];
-type UpdateProductAffiliateDiscountForm =
-  components["schemas"]["UpdateProductAffiliateDiscountForm"];
 type BulkDeleteProductForm = components["schemas"]["BulkDeleteProductForm"];
-type UpdateProductSecurityForm = components["schemas"]["UpdateProductSecurityForm"];
 
 interface ProductSearchOptions {
   visibility?: Privacy;
@@ -39,9 +33,6 @@ export class ProductsResource {
   all() {
     return this.t.request<PublicProductReference[]>(`/stores/${this.storeId}/products/all`);
   }
-  get(productId: string) {
-    return this.t.request<Product>(`/stores/${this.storeId}/products/${productId}`);
-  }
   getFilters() {
     return this.t.request<Record<string, number>>(`/stores/${this.storeId}/products/filters`);
   }
@@ -54,57 +45,14 @@ export class ProductsResource {
       body: JSON.stringify(form),
     });
   }
-  addImage(productId: string, image: Blob | File, filename?: string) {
-    const form = new FormData();
-    form.append("image", image, filename);
-    return this.t.request<string>(`/stores/${this.storeId}/products/${productId}/images`, {
-      method: "PATCH",
-      body: form,
-    });
-  }
-  delete(productId: string) {
-    return this.t.request<void>(`/stores/${this.storeId}/products/${productId}`, {
-      method: "DELETE",
-    });
-  }
   deleteBulk(form: BulkDeleteProductForm) {
     return this.t.request<void>(`/stores/${this.storeId}/products`, {
-      method: "PATCH",
-      body: JSON.stringify(form),
-    });
-  }
-  deleteImage(productId: string, fileName: string) {
-    return this.t.request<void>(
-      `/stores/${this.storeId}/products/${productId}/images/${fileName}`,
-      { method: "DELETE" },
-    );
-  }
-  update(productId: string, form: UpdateProductForm) {
-    return this.t.request<void>(`/stores/${this.storeId}/products/${productId}`, {
-      method: "PUT",
-      body: JSON.stringify(form),
-    });
-  }
-  updatePaymentSettings(productId: string, form: ProductPaymentForm) {
-    return this.t.request<void>(`/stores/${this.storeId}/products/${productId}/payment`, {
-      method: "PUT",
+      method: "DELETE",
       body: JSON.stringify(form),
     });
   }
   updateBulk(form: BulkUpdateProductForm) {
     return this.t.request<void>(`/stores/${this.storeId}/products`, {
-      method: "PUT",
-      body: JSON.stringify(form),
-    });
-  }
-  updateAffiliateDiscount(productId: string, form: UpdateProductAffiliateDiscountForm) {
-    return this.t.request<void>(`/stores/${this.storeId}/products/${productId}/affiliateDiscount`, {
-      method: "PUT",
-      body: JSON.stringify(form),
-    });
-  }
-  updateSecurity(productId: string, form: UpdateProductSecurityForm) {
-    return this.t.request<void>(`/stores/${this.storeId}/products/${productId}/security`, {
       method: "PUT",
       body: JSON.stringify(form),
     });
@@ -129,18 +77,6 @@ export class ProductsResource {
     return this.t.request<void>(`/stores/${this.storeId}/products/order`, {
       method: "PATCH",
       body: JSON.stringify(items),
-    });
-  }
-  reorderImages(productId: string, images: Record<string, number>) {
-    return this.t.request<void>(`/stores/${this.storeId}/products/${productId}/images/order`, {
-      method: "PATCH",
-      body: JSON.stringify(images),
-    });
-  }
-  duplicate(productId: string, form: DuplicateProductForm) {
-    return this.t.request<Product>(`/stores/${this.storeId}/products/${productId}/duplicate`, {
-      method: "POST",
-      body: JSON.stringify(form),
     });
   }
 }
