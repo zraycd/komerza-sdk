@@ -41,7 +41,7 @@ export class KomerzaClient {
   public userAgent: string;
   public baseUrl: string = "https://api.komerza.com";
 
-  private req: Requester;
+  private t: Transport;
   public user: UserResource;
   public stores: StoresResource;
 
@@ -50,21 +50,29 @@ export class KomerzaClient {
     this.userAgent = config.userAgent;
     if (config.baseUrl) this.baseUrl = config.baseUrl;
 
-    this.req = this.request.bind(this);
-    this.user = new UserResource(this.req);
-    this.stores = new StoresResource(this.req);
+    const transport: Transport = {
+      request: this.request.bind(this),
+      paginated: this.requestPaginated.bind(this),
+    };
+    this.t = transport;
+    this.user = new UserResource(transport);
+    this.stores = new StoresResource(transport);
   }
 
-  private async request<T>(path: string, opts: RequestInit = {}) {
+  private async send<E extends { success: boolean; message: string | null; code: string | null }>(
+    path: string,
+    opts: RequestInit = {},
+  ): Promise<E> {
     let res: Response;
     try {
+      const isForm = opts.body instanceof FormData;
       res = await fetch(this.baseUrl + path, {
         ...opts,
         headers: {
           ...opts.headers,
           Authorization: `Bearer ${this.apiKey}`,
           "User-Agent": this.userAgent,
-          "Content-Type": "application/json",
+          ...(isForm ? {} : { "Content-Type": "application/json" }),
         },
       });
     } catch (cause) {
@@ -74,7 +82,6 @@ export class KomerzaClient {
         body: cause,
       });
     }
-
     if (!res.ok) {
       const body = (await res.json().catch(() => null)) as ApiResponse<unknown> | null;
       throw new KomerzaError({
@@ -86,8 +93,7 @@ export class KomerzaClient {
           res.status === 429 ? Number(res.headers.get("Retry-After")) || undefined : undefined,
       });
     }
-    const json = (await res.json()) as ApiResponse<T>;
-
+    const json = (await res.json()) as E;
     if (!json.success) {
       throw new KomerzaError({
         message: json.message ?? "request failed",
@@ -96,11 +102,28 @@ export class KomerzaClient {
         body: json,
       });
     }
+    return json;
+  }
+
+  private async request<T>(path: string, opts?: RequestInit): Promise<T> {
+    const json = await this.send<ApiResponse<T>>(path, opts);
     return json.data as T;
   }
+
+  private async requestPaginated<T>(
+    path: string,
+    opts?: RequestInit,
+  ): Promise<{ data: T[]; pages: number }> {
+    const json = await this.send<Paginated<T>>(path, opts);
+    return { data: json.data, pages: json.pages };
+  }
+
   store(storeId: string): Store {
-    return new Store(this.req, storeId);
+    return new Store(this.t, storeId);
   }
 }
 
-export type Requester = <T>(path: string, opts?: RequestInit) => Promise<T>;
+export interface Transport {
+  request: <T>(path: string, opts?: RequestInit) => Promise<T>;
+  paginated: <T>(path: string, opts?: RequestInit) => Promise<{ data: T[]; pages: number }>;
+}

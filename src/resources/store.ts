@@ -1,6 +1,6 @@
 import { ProductsResource } from "./products.js";
 import { components } from "../generated/schema.js";
-import { Requester } from "../client.js";
+import { Transport } from "../client.js";
 
 type StoreType = components["schemas"]["PublicStoreReference"];
 type UpdateStoreDto = components["schemas"]["UpdateStoreForm"];
@@ -11,26 +11,26 @@ export class Store {
   public products: ProductsResource;
 
   constructor(
-    private req: Requester,
+    private t: Transport,
     public readonly storeId: string,
   ) {
-    this.products = new ProductsResource(req, storeId);
+    this.products = new ProductsResource(t, storeId);
   }
 
   get() {
-    return this.req<StoreType>(`/stores/${this.storeId}`);
+    return this.t.request<StoreType>(`/stores/${this.storeId}`);
   }
   getPermissions() {
-    return this.req<StorePermissionsResponse>(`/stores/${this.storeId}/permissions`);
+    return this.t.request<StorePermissionsResponse>(`/stores/${this.storeId}/permissions`);
   }
   update(data: UpdateStoreDto) {
-    return this.req<StoreType>(`/stores/${this.storeId}`, {
+    return this.t.request<StoreType>(`/stores/${this.storeId}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   }
   toggleMaintenance(form: MaintenanceModeForm = { reason: "" }) {
-    return this.req<unknown>(`/stores/${this.storeId}/maintenance`, {
+    return this.t.request<void>(`/stores/${this.storeId}/maintenance`, {
       method: "PUT",
       body: JSON.stringify(form),
     });
