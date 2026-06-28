@@ -1,5 +1,7 @@
 import { Transport } from "../client.js";
 import { components } from "../generated/schema.js";
+import { Variant } from "./variant.js";
+import { VariantsResource } from "./variants.js";
 
 type ProductData = components["schemas"]["Product"];
 type UpdateProductSecurityForm = components["schemas"]["UpdateProductSecurityForm"];
@@ -11,11 +13,14 @@ type UpdateProductAffiliateDiscountForm =
 type PublicProduct = components["schemas"]["PublicProduct"];
 
 export class Product {
+  public variants: VariantsResource;
   constructor(
     private t: Transport,
     public readonly storeId: string,
     public readonly productId: string,
-  ) {}
+  ) {
+    this.variants = new VariantsResource(t, storeId, productId);
+  }
 
   get() {
     return this.t.request<ProductData>(`/stores/${this.storeId}/products/${this.productId}`);
@@ -80,5 +85,9 @@ export class Product {
         body: JSON.stringify(form),
       },
     );
+  }
+
+  variant(variantId: string): Variant {
+    return new Variant(this.t, this.storeId, this.productId, variantId);
   }
 }

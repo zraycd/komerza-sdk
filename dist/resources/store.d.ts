@@ -1,0 +1,100 @@
+import { ProductsResource } from "./products.js";
+import { components } from "../generated/schema.js";
+import { Transport } from "../client.js";
+import { Product } from "./product.js";
+import { Category } from "./category.js";
+import { CategoriesResource } from "./categories.js";
+declare type UpdateStoreDto = components["schemas"]["UpdateStoreForm"];
+declare type MaintenanceModeForm = components["schemas"]["MaintenanceModeForm"];
+export declare class Store {
+    private t;
+    readonly storeId: string;
+    products: ProductsResource;
+    categories: CategoriesResource;
+    constructor(t: Transport, storeId: string);
+    get(): Promise<{
+        id: string;
+        dateCreated: string;
+        name: string;
+        description: string;
+        url: string;
+        customDomain?: string | null | undefined;
+        currencyCode: string;
+        prependProductNameToReceipt: boolean;
+        isAutomaticReviewsEnabled: boolean;
+        rating: number;
+        scopes?: string[] | null | undefined;
+        domain: string;
+        isCustomerBalanceEnabled: boolean;
+        maintenanceReason?: string | null | undefined;
+        termsOfServiceUrl?: string | null | undefined;
+        refundPolicyUrl?: string | null | undefined;
+        privacyPolicyUrl?: string | null | undefined;
+        affiliateOptions?: {
+            isEnabled: boolean;
+            defaultReturnPercentage: number;
+            defaultPercentageOff?: number | null | undefined;
+            canConvertAffiliateBalance: boolean;
+            isPublicRegistrationEnabled: boolean;
+            isLinkEditingEnabled: boolean;
+        } | undefined;
+        branding: {
+            bannerFileName?: string | null | undefined;
+            iconFileName?: string | null | undefined;
+            accentColor?: string | null | undefined;
+            isAutomaticCurrencyConversionEnabled: boolean;
+        };
+        isTicketingEnabled: boolean;
+        externalSupportUrl?: string | null | undefined;
+        externalSupportDescription?: string | null | undefined;
+        isInactive: boolean;
+        lastOrderAt?: string | null | undefined;
+    }>;
+    getPermissions(): Promise<{
+        isOwner: boolean;
+        permissions: string[];
+        enabledPaymentMethods: string[];
+    }>;
+    update(data: UpdateStoreDto): Promise<{
+        id: string;
+        dateCreated: string;
+        name: string;
+        description: string;
+        url: string;
+        customDomain?: string | null | undefined;
+        currencyCode: string;
+        prependProductNameToReceipt: boolean;
+        isAutomaticReviewsEnabled: boolean;
+        rating: number;
+        scopes?: string[] | null | undefined;
+        domain: string;
+        isCustomerBalanceEnabled: boolean;
+        maintenanceReason?: string | null | undefined;
+        termsOfServiceUrl?: string | null | undefined;
+        refundPolicyUrl?: string | null | undefined;
+        privacyPolicyUrl?: string | null | undefined;
+        affiliateOptions?: {
+            isEnabled: boolean;
+            defaultReturnPercentage: number;
+            defaultPercentageOff?: number | null | undefined;
+            canConvertAffiliateBalance: boolean;
+            isPublicRegistrationEnabled: boolean;
+            isLinkEditingEnabled: boolean;
+        } | undefined;
+        branding: {
+            bannerFileName?: string | null | undefined;
+            iconFileName?: string | null | undefined;
+            accentColor?: string | null | undefined;
+            isAutomaticCurrencyConversionEnabled: boolean;
+        };
+        isTicketingEnabled: boolean;
+        externalSupportUrl?: string | null | undefined;
+        externalSupportDescription?: string | null | undefined;
+        isInactive: boolean;
+        lastOrderAt?: string | null | undefined;
+    }>;
+    toggleMaintenance(form?: MaintenanceModeForm): Promise<void>;
+    product(productId: string): Product;
+    category(categoryId: string): Category;
+}
+export {};

@@ -1,0 +1,270 @@
+/// <reference types="node" resolution-mode="require"/>
+import { Transport } from "../client.js";
+import { components } from "../generated/schema.js";
+import { Variant } from "./variant.js";
+import { VariantsResource } from "./variants.js";
+declare type UpdateProductSecurityForm = components["schemas"]["UpdateProductSecurityForm"];
+declare type UpdateProductForm = components["schemas"]["UpdateProductForm"];
+declare type ProductPaymentForm = components["schemas"]["ProductPaymentForm"];
+declare type DuplicateProductForm = components["schemas"]["DuplicateProductForm"];
+declare type UpdateProductAffiliateDiscountForm = components["schemas"]["UpdateProductAffiliateDiscountForm"];
+export declare class Product {
+    private t;
+    readonly storeId: string;
+    readonly productId: string;
+    variants: VariantsResource;
+    constructor(t: Transport, storeId: string, productId: string);
+    get(): Promise<{
+        id: string;
+        dateCreated: string;
+        variants: {
+            id: string;
+            dateCreated: string;
+            name: string;
+            productId: string;
+            storeId: string;
+            cost: number;
+            deliveryTypes: string[];
+            files: {
+                id: string;
+                dateCreated: string;
+                friendlyName: string;
+                ipAddress: string;
+                userId: string;
+            }[];
+            dynamicUrl?: string | null | undefined;
+            deliveryMessage?: string | null | undefined;
+            minimumQuantity: number;
+            maximumQuantity: number;
+            order: number;
+            imageNames: string[];
+            stock: number;
+            stockMode: 0 | 1 | 2;
+            customFields: {
+                id: string;
+                dateCreated: string;
+                variantId: string;
+                label: string;
+                identifier: string;
+                placeholder?: string | null | undefined;
+                type: string;
+                isRequired: boolean;
+                hint?: string | null | undefined;
+                options: {
+                    id: string;
+                    dateCreated: string;
+                    customFieldId: string;
+                    label: string;
+                    value: string;
+                    order: number;
+                }[];
+            }[];
+            volumeDiscounts: {
+                id: string;
+                dateCreated: string;
+                variantId: string;
+                quantity: number;
+                discountType: 0 | 1 | 2;
+                discountValue: number;
+            }[];
+            disableVolumeDiscountOnCoupon: boolean;
+            metadata?: string | null | undefined;
+            billingInterval?: 0 | 1 | 2 | 3 | 4 | undefined;
+            customIntervalDays?: number | null | undefined;
+        }[];
+        name: string;
+        slug?: string | null | undefined;
+        description: string;
+        metaDescription?: string | null | undefined;
+        visibility: 0 | 1 | 2 | 3;
+        imageNames: string[];
+        storeId: string;
+        userId: string;
+        shouldBlockVpns: boolean;
+        order: number;
+        isBestSeller: boolean;
+        blacklistedPaymentGateways: string[];
+        additionalFees: {
+            [key: string]: string;
+        };
+        additionalFixedFees: {
+            [key: string]: string;
+        };
+        metadata?: string | null | undefined;
+        affiliateDiscountMode: 0 | 1 | 2;
+        customAffiliateDiscountPercentage?: number | null | undefined;
+        subscriptionAllowPause?: boolean | null | undefined;
+        subscriptionMaxPauseDurationDays?: number | null | undefined;
+        subscriptionMaxPauseCount?: number | null | undefined;
+        subscriptionAllowCancel?: boolean | null | undefined;
+        subscriptionCancelMode?: 0 | 1 | undefined;
+        subscriptionAllowReactivate?: boolean | null | undefined;
+        subscriptionGracePeriodDays?: number | null | undefined;
+        subscriptionRevokeOnExpiry?: boolean | null | undefined;
+    }>;
+    addImage(image: Blob | File, filename?: string): Promise<string>;
+    delete(): Promise<void>;
+    deleteImage(fileName: string): Promise<{
+        id: string;
+        dateCreated: string;
+        name: string;
+        description: string;
+        imageNames: string[];
+        imageLinks: string[];
+        storeId: string;
+        blacklistedPaymentGateways: string[];
+        rating: number;
+        shouldBlockVirtualPrivateNetworks: boolean;
+        order: number;
+        isBestSeller: boolean;
+        additionalFees: {
+            [key: string]: string;
+        };
+        additionalFixedFees: {
+            [key: string]: string;
+        };
+        slug?: string | null | undefined;
+        variants: {
+            id: string;
+            dateCreated: string;
+            name: string;
+            productId: string;
+            storeId: string;
+            cost: number;
+            minimumQuantity: number;
+            maximumQuantity: number;
+            order: number;
+            requireDiscordAuthorization: boolean;
+            type: 0 | 1;
+            billingInterval?: 0 | 1 | 2 | 3 | 4 | undefined;
+            customIntervalDays?: number | null | undefined;
+            deliveryTypes: string[];
+            imageNames: string[];
+            stock: number;
+            stockMode: 0 | 1 | 2;
+            customFields: {
+                id: string;
+                variantId: string;
+                label: string;
+                identifier: string;
+                placeholder?: string | null | undefined;
+                type: string;
+                isRequired: boolean;
+                hint?: string | null | undefined;
+                options: {
+                    id: string;
+                    customFieldId: string;
+                    label: string;
+                    value: string;
+                    order: number;
+                }[];
+            }[];
+            volumeDiscounts: {
+                id: string;
+                variantId: string;
+                quantity: number;
+                discountType: 0 | 1 | 2;
+                discountValue: number;
+            }[];
+            disableVolumeDiscountOnCoupon: boolean;
+        }[];
+        metadata?: string | null | undefined;
+        affiliateDiscountMode: number;
+        customAffiliateDiscountPercentage?: number | null | undefined;
+    }>;
+    update(form: UpdateProductForm): Promise<void>;
+    updatePaymentSettings(form: ProductPaymentForm): Promise<void>;
+    updateAffiliateDiscount(form: UpdateProductAffiliateDiscountForm): Promise<void>;
+    updateSecurity(form: UpdateProductSecurityForm): Promise<void>;
+    reorderImages(images: Record<string, number>): Promise<void>;
+    duplicate(form: DuplicateProductForm): Promise<{
+        id: string;
+        dateCreated: string;
+        variants: {
+            id: string;
+            dateCreated: string;
+            name: string;
+            productId: string;
+            storeId: string;
+            cost: number;
+            deliveryTypes: string[];
+            files: {
+                id: string;
+                dateCreated: string;
+                friendlyName: string;
+                ipAddress: string;
+                userId: string;
+            }[];
+            dynamicUrl?: string | null | undefined;
+            deliveryMessage?: string | null | undefined;
+            minimumQuantity: number;
+            maximumQuantity: number;
+            order: number;
+            imageNames: string[];
+            stock: number;
+            stockMode: 0 | 1 | 2;
+            customFields: {
+                id: string;
+                dateCreated: string;
+                variantId: string;
+                label: string;
+                identifier: string;
+                placeholder?: string | null | undefined;
+                type: string;
+                isRequired: boolean;
+                hint?: string | null | undefined;
+                options: {
+                    id: string;
+                    dateCreated: string;
+                    customFieldId: string;
+                    label: string;
+                    value: string;
+                    order: number;
+                }[];
+            }[];
+            volumeDiscounts: {
+                id: string;
+                dateCreated: string;
+                variantId: string;
+                quantity: number;
+                discountType: 0 | 1 | 2;
+                discountValue: number;
+            }[];
+            disableVolumeDiscountOnCoupon: boolean;
+            metadata?: string | null | undefined;
+            billingInterval?: 0 | 1 | 2 | 3 | 4 | undefined;
+            customIntervalDays?: number | null | undefined;
+        }[];
+        name: string;
+        slug?: string | null | undefined;
+        description: string;
+        metaDescription?: string | null | undefined;
+        visibility: 0 | 1 | 2 | 3;
+        imageNames: string[];
+        storeId: string;
+        userId: string;
+        shouldBlockVpns: boolean;
+        order: number;
+        isBestSeller: boolean;
+        blacklistedPaymentGateways: string[];
+        additionalFees: {
+            [key: string]: string;
+        };
+        additionalFixedFees: {
+            [key: string]: string;
+        };
+        metadata?: string | null | undefined;
+        affiliateDiscountMode: 0 | 1 | 2;
+        customAffiliateDiscountPercentage?: number | null | undefined;
+        subscriptionAllowPause?: boolean | null | undefined;
+        subscriptionMaxPauseDurationDays?: number | null | undefined;
+        subscriptionMaxPauseCount?: number | null | undefined;
+        subscriptionAllowCancel?: boolean | null | undefined;
+        subscriptionCancelMode?: 0 | 1 | undefined;
+        subscriptionAllowReactivate?: boolean | null | undefined;
+        subscriptionGracePeriodDays?: number | null | undefined;
+        subscriptionRevokeOnExpiry?: boolean | null | undefined;
+    }>;
+    variant(variantId: string): Variant;
+}
+export {};

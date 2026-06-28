@@ -1,0 +1,446 @@
+import type { components } from "../generated/schema.js";
+import type { Transport } from "../client.js";
+declare type CreateProductForm = components["schemas"]["CreateProductForm"];
+declare type Privacy = components["schemas"]["Privacy"];
+declare type BulkUpdateProductForm = components["schemas"]["BulkUpdateProductForm"];
+declare type OrderedItem = components["schemas"]["OrderedItem"];
+declare type BulkDeleteProductForm = components["schemas"]["BulkDeleteProductForm"];
+interface ProductSearchOptions {
+    visibility?: Privacy;
+    isBestSeller?: boolean;
+    shouldBlockVpns?: boolean;
+    lowStock?: boolean;
+    filters?: string;
+    sorts?: string;
+    page?: number;
+    pageSize?: number;
+}
+export declare class ProductsResource {
+    private t;
+    private storeId;
+    constructor(t: Transport, storeId: string);
+    list(): Promise<{
+        data: {
+            id: string;
+            dateCreated: string;
+            variants: {
+                id: string;
+                dateCreated: string;
+                name: string;
+                productId: string;
+                storeId: string;
+                cost: number;
+                deliveryTypes: string[];
+                files: {
+                    id: string;
+                    dateCreated: string;
+                    friendlyName: string;
+                    ipAddress: string;
+                    userId: string;
+                }[];
+                dynamicUrl?: string | null | undefined;
+                deliveryMessage?: string | null | undefined;
+                minimumQuantity: number;
+                maximumQuantity: number;
+                order: number;
+                imageNames: string[];
+                stock: number;
+                stockMode: 0 | 1 | 2;
+                customFields: {
+                    id: string;
+                    dateCreated: string;
+                    variantId: string;
+                    label: string;
+                    identifier: string;
+                    placeholder?: string | null | undefined;
+                    type: string;
+                    isRequired: boolean;
+                    hint?: string | null | undefined;
+                    options: {
+                        id: string;
+                        dateCreated: string;
+                        customFieldId: string;
+                        label: string;
+                        value: string;
+                        order: number;
+                    }[];
+                }[];
+                volumeDiscounts: {
+                    id: string;
+                    dateCreated: string;
+                    variantId: string;
+                    quantity: number;
+                    discountType: 0 | 1 | 2;
+                    discountValue: number;
+                }[];
+                disableVolumeDiscountOnCoupon: boolean;
+                metadata?: string | null | undefined;
+                billingInterval?: 0 | 1 | 2 | 3 | 4 | undefined;
+                customIntervalDays?: number | null | undefined;
+            }[];
+            name: string;
+            slug?: string | null | undefined;
+            description: string;
+            metaDescription?: string | null | undefined;
+            visibility: 0 | 1 | 2 | 3;
+            imageNames: string[];
+            storeId: string;
+            userId: string;
+            shouldBlockVpns: boolean;
+            order: number;
+            isBestSeller: boolean;
+            blacklistedPaymentGateways: string[];
+            additionalFees: {
+                [key: string]: string;
+            };
+            additionalFixedFees: {
+                [key: string]: string;
+            };
+            metadata?: string | null | undefined;
+            affiliateDiscountMode: 0 | 1 | 2;
+            customAffiliateDiscountPercentage?: number | null | undefined;
+            subscriptionAllowPause?: boolean | null | undefined;
+            subscriptionMaxPauseDurationDays?: number | null | undefined;
+            subscriptionMaxPauseCount?: number | null | undefined;
+            subscriptionAllowCancel?: boolean | null | undefined;
+            subscriptionCancelMode?: 0 | 1 | undefined;
+            subscriptionAllowReactivate?: boolean | null | undefined;
+            subscriptionGracePeriodDays?: number | null | undefined;
+            subscriptionRevokeOnExpiry?: boolean | null | undefined;
+            stock: number;
+        }[];
+        pages: number;
+    }>;
+    all(): Promise<{
+        id: string;
+        dateCreated: string;
+        name: string;
+        description: string;
+        imageNames: string[];
+        rating: number;
+        order: number;
+        visibility: 0 | 1 | 2 | 3;
+        storeId: string;
+        slug?: string | null | undefined;
+        variants: {
+            id: string;
+            dateCreated: string;
+            name: string;
+            productId: string;
+            storeId: string;
+            cost: number;
+            minimumQuantity: number;
+            maximumQuantity: number;
+            order: number;
+            requireDiscordAuthorization: boolean;
+            type: 0 | 1;
+            billingInterval?: 0 | 1 | 2 | 3 | 4 | undefined;
+            customIntervalDays?: number | null | undefined;
+            deliveryTypes: string[];
+            imageNames: string[];
+            stock: number;
+            stockMode: 0 | 1 | 2;
+            customFields: {
+                id: string;
+                variantId: string;
+                label: string;
+                identifier: string;
+                placeholder?: string | null | undefined;
+                type: string;
+                isRequired: boolean;
+                hint?: string | null | undefined;
+                options: {
+                    id: string;
+                    customFieldId: string;
+                    label: string;
+                    value: string;
+                    order: number;
+                }[];
+            }[];
+            volumeDiscounts: {
+                id: string;
+                variantId: string;
+                quantity: number;
+                discountType: 0 | 1 | 2;
+                discountValue: number;
+            }[];
+            disableVolumeDiscountOnCoupon: boolean;
+        }[];
+        isBestSeller: boolean;
+        metadata?: string | null | undefined;
+        affiliateDiscountMode: number;
+        customAffiliateDiscountPercentage?: number | null | undefined;
+    }[]>;
+    getFilters(): Promise<Record<string, number>>;
+    getBySlug(slug: string): Promise<{
+        id: string;
+        dateCreated: string;
+        variants: {
+            id: string;
+            dateCreated: string;
+            name: string;
+            productId: string;
+            storeId: string;
+            cost: number;
+            deliveryTypes: string[];
+            files: {
+                id: string;
+                dateCreated: string;
+                friendlyName: string;
+                ipAddress: string;
+                userId: string;
+            }[];
+            dynamicUrl?: string | null | undefined;
+            deliveryMessage?: string | null | undefined;
+            minimumQuantity: number;
+            maximumQuantity: number;
+            order: number;
+            imageNames: string[];
+            stock: number;
+            stockMode: 0 | 1 | 2;
+            customFields: {
+                id: string;
+                dateCreated: string;
+                variantId: string;
+                label: string;
+                identifier: string;
+                placeholder?: string | null | undefined;
+                type: string;
+                isRequired: boolean;
+                hint?: string | null | undefined;
+                options: {
+                    id: string;
+                    dateCreated: string;
+                    customFieldId: string;
+                    label: string;
+                    value: string;
+                    order: number;
+                }[];
+            }[];
+            volumeDiscounts: {
+                id: string;
+                dateCreated: string;
+                variantId: string;
+                quantity: number;
+                discountType: 0 | 1 | 2;
+                discountValue: number;
+            }[];
+            disableVolumeDiscountOnCoupon: boolean;
+            metadata?: string | null | undefined;
+            billingInterval?: 0 | 1 | 2 | 3 | 4 | undefined;
+            customIntervalDays?: number | null | undefined;
+        }[];
+        name: string;
+        slug?: string | null | undefined;
+        description: string;
+        metaDescription?: string | null | undefined;
+        visibility: 0 | 1 | 2 | 3;
+        imageNames: string[];
+        storeId: string;
+        userId: string;
+        shouldBlockVpns: boolean;
+        order: number;
+        isBestSeller: boolean;
+        blacklistedPaymentGateways: string[];
+        additionalFees: {
+            [key: string]: string;
+        };
+        additionalFixedFees: {
+            [key: string]: string;
+        };
+        metadata?: string | null | undefined;
+        affiliateDiscountMode: 0 | 1 | 2;
+        customAffiliateDiscountPercentage?: number | null | undefined;
+        subscriptionAllowPause?: boolean | null | undefined;
+        subscriptionMaxPauseDurationDays?: number | null | undefined;
+        subscriptionMaxPauseCount?: number | null | undefined;
+        subscriptionAllowCancel?: boolean | null | undefined;
+        subscriptionCancelMode?: 0 | 1 | undefined;
+        subscriptionAllowReactivate?: boolean | null | undefined;
+        subscriptionGracePeriodDays?: number | null | undefined;
+        subscriptionRevokeOnExpiry?: boolean | null | undefined;
+    }>;
+    create(form: CreateProductForm): Promise<{
+        id: string;
+        dateCreated: string;
+        variants: {
+            id: string;
+            dateCreated: string;
+            name: string;
+            productId: string;
+            storeId: string;
+            cost: number;
+            deliveryTypes: string[];
+            files: {
+                id: string;
+                dateCreated: string;
+                friendlyName: string;
+                ipAddress: string;
+                userId: string;
+            }[];
+            dynamicUrl?: string | null | undefined;
+            deliveryMessage?: string | null | undefined;
+            minimumQuantity: number;
+            maximumQuantity: number;
+            order: number;
+            imageNames: string[];
+            stock: number;
+            stockMode: 0 | 1 | 2;
+            customFields: {
+                id: string;
+                dateCreated: string;
+                variantId: string;
+                label: string;
+                identifier: string;
+                placeholder?: string | null | undefined;
+                type: string;
+                isRequired: boolean;
+                hint?: string | null | undefined;
+                options: {
+                    id: string;
+                    dateCreated: string;
+                    customFieldId: string;
+                    label: string;
+                    value: string;
+                    order: number;
+                }[];
+            }[];
+            volumeDiscounts: {
+                id: string;
+                dateCreated: string;
+                variantId: string;
+                quantity: number;
+                discountType: 0 | 1 | 2;
+                discountValue: number;
+            }[];
+            disableVolumeDiscountOnCoupon: boolean;
+            metadata?: string | null | undefined;
+            billingInterval?: 0 | 1 | 2 | 3 | 4 | undefined;
+            customIntervalDays?: number | null | undefined;
+        }[];
+        name: string;
+        slug?: string | null | undefined;
+        description: string;
+        metaDescription?: string | null | undefined;
+        visibility: 0 | 1 | 2 | 3;
+        imageNames: string[];
+        storeId: string;
+        userId: string;
+        shouldBlockVpns: boolean;
+        order: number;
+        isBestSeller: boolean;
+        blacklistedPaymentGateways: string[];
+        additionalFees: {
+            [key: string]: string;
+        };
+        additionalFixedFees: {
+            [key: string]: string;
+        };
+        metadata?: string | null | undefined;
+        affiliateDiscountMode: 0 | 1 | 2;
+        customAffiliateDiscountPercentage?: number | null | undefined;
+        subscriptionAllowPause?: boolean | null | undefined;
+        subscriptionMaxPauseDurationDays?: number | null | undefined;
+        subscriptionMaxPauseCount?: number | null | undefined;
+        subscriptionAllowCancel?: boolean | null | undefined;
+        subscriptionCancelMode?: 0 | 1 | undefined;
+        subscriptionAllowReactivate?: boolean | null | undefined;
+        subscriptionGracePeriodDays?: number | null | undefined;
+        subscriptionRevokeOnExpiry?: boolean | null | undefined;
+    }>;
+    deleteBulk(form: BulkDeleteProductForm): Promise<void>;
+    updateBulk(form: BulkUpdateProductForm): Promise<void>;
+    search(query: string, opts?: ProductSearchOptions): Promise<{
+        data: {
+            id: string;
+            dateCreated: string;
+            variants: {
+                id: string;
+                dateCreated: string;
+                name: string;
+                productId: string;
+                storeId: string;
+                cost: number;
+                deliveryTypes: string[];
+                files: {
+                    id: string;
+                    dateCreated: string;
+                    friendlyName: string;
+                    ipAddress: string;
+                    userId: string;
+                }[];
+                dynamicUrl?: string | null | undefined;
+                deliveryMessage?: string | null | undefined;
+                minimumQuantity: number;
+                maximumQuantity: number;
+                order: number;
+                imageNames: string[];
+                stock: number;
+                stockMode: 0 | 1 | 2;
+                customFields: {
+                    id: string;
+                    dateCreated: string;
+                    variantId: string;
+                    label: string;
+                    identifier: string;
+                    placeholder?: string | null | undefined;
+                    type: string;
+                    isRequired: boolean;
+                    hint?: string | null | undefined;
+                    options: {
+                        id: string;
+                        dateCreated: string;
+                        customFieldId: string;
+                        label: string;
+                        value: string;
+                        order: number;
+                    }[];
+                }[];
+                volumeDiscounts: {
+                    id: string;
+                    dateCreated: string;
+                    variantId: string;
+                    quantity: number;
+                    discountType: 0 | 1 | 2;
+                    discountValue: number;
+                }[];
+                disableVolumeDiscountOnCoupon: boolean;
+                metadata?: string | null | undefined;
+                billingInterval?: 0 | 1 | 2 | 3 | 4 | undefined;
+                customIntervalDays?: number | null | undefined;
+            }[];
+            name: string;
+            slug?: string | null | undefined;
+            description: string;
+            metaDescription?: string | null | undefined;
+            visibility: 0 | 1 | 2 | 3;
+            imageNames: string[];
+            storeId: string;
+            userId: string;
+            shouldBlockVpns: boolean;
+            order: number;
+            isBestSeller: boolean;
+            blacklistedPaymentGateways: string[];
+            additionalFees: {
+                [key: string]: string;
+            };
+            additionalFixedFees: {
+                [key: string]: string;
+            };
+            metadata?: string | null | undefined;
+            affiliateDiscountMode: 0 | 1 | 2;
+            customAffiliateDiscountPercentage?: number | null | undefined;
+            subscriptionAllowPause?: boolean | null | undefined;
+            subscriptionMaxPauseDurationDays?: number | null | undefined;
+            subscriptionMaxPauseCount?: number | null | undefined;
+            subscriptionAllowCancel?: boolean | null | undefined;
+            subscriptionCancelMode?: 0 | 1 | undefined;
+            subscriptionAllowReactivate?: boolean | null | undefined;
+            subscriptionGracePeriodDays?: number | null | undefined;
+            subscriptionRevokeOnExpiry?: boolean | null | undefined;
+        }[];
+        pages: number;
+    }>;
+    reorder(items: OrderedItem[]): Promise<void>;
+}
+export {};
