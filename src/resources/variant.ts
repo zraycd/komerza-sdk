@@ -1,5 +1,6 @@
 import { Transport } from "../client.js";
 import { components } from "../generated/schema.js";
+import { DiscountsResource } from "./discounts.js";
 
 type VariantData = components["schemas"]["Variant"];
 type UpdateVariantForm = components["schemas"]["UpdateVariantForm"];
@@ -7,6 +8,7 @@ type VariantDeliveryForm = components["schemas"]["VariantDeliveryForm"];
 type DuplicateVariantForm = components["schemas"]["DuplicateVariantForm"];
 
 export class Variant {
+  public discounts: DiscountsResource;
   private baseUrl: string;
   constructor(
     private t: Transport,
@@ -15,6 +17,7 @@ export class Variant {
     public readonly variantId: string,
   ) {
     this.baseUrl = `/stores/${storeId}/products/${productId}/variants/${variantId}`;
+    this.discounts = new DiscountsResource(t, storeId, productId, variantId);
   }
 
   update(form: UpdateVariantForm) {
