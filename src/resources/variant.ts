@@ -1,6 +1,9 @@
 import { Transport } from "../client.js";
 import { components } from "../generated/schema.js";
 import { DiscountsResource } from "./discounts.js";
+import { Field } from "./field.js";
+import { FieldsResource } from "./fields.js";
+import { ItemsResource } from "./items.js";
 
 type VariantData = components["schemas"]["Variant"];
 type UpdateVariantForm = components["schemas"]["UpdateVariantForm"];
@@ -9,6 +12,8 @@ type DuplicateVariantForm = components["schemas"]["DuplicateVariantForm"];
 
 export class Variant {
   public discounts: DiscountsResource;
+  public fields: FieldsResource;
+  public items: ItemsResource;
   private baseUrl: string;
   constructor(
     private t: Transport,
@@ -18,6 +23,8 @@ export class Variant {
   ) {
     this.baseUrl = `/stores/${storeId}/products/${productId}/variants/${variantId}`;
     this.discounts = new DiscountsResource(t, storeId, productId, variantId);
+    this.fields = new FieldsResource(t, storeId, productId, variantId);
+    this.items = new ItemsResource(t, this.baseUrl);
   }
 
   update(form: UpdateVariantForm) {
@@ -70,5 +77,9 @@ export class Variant {
   }
   deleteFile(fileId: string) {
     return this.t.request<VariantData>(this.baseUrl + `/file/${fileId}`, { method: "DELETE" });
+  }
+
+  field(fieldId: string): Field {
+    return new Field(this.t, this.baseUrl, fieldId);
   }
 }
