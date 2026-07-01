@@ -7,6 +7,7 @@ import { CategoriesResource } from "./categories.js";
 import { CouponsResource } from "./coupons.js";
 import { TicketsResource } from "./tickets.js";
 import { CustomersResource } from "./customers.js";
+import { OrdersResource } from "./orders.js";
 
 type StoreType = components["schemas"]["PublicStoreReference"];
 type UpdateStoreDto = components["schemas"]["UpdateStoreForm"];
@@ -19,6 +20,7 @@ export class Store {
   public coupons: CouponsResource;
   public tickets: TicketsResource;
   public customers: CustomersResource;
+  public orders: OrdersResource;
 
   constructor(
     private t: Transport,
@@ -29,6 +31,7 @@ export class Store {
     this.coupons = new CouponsResource(t, storeId);
     this.tickets = new TicketsResource(t, storeId);
     this.customers = new CustomersResource(t, storeId);
+    this.orders = new OrdersResource(t, storeId);
   }
 
   get() {
