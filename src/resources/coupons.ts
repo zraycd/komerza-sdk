@@ -50,7 +50,7 @@ export class CouponsResource {
   all() {
     return this.t.request<PublicCouponReference[]>(`${this.baseUrl}/all`);
   }
-  search(query: string, page: number = 0) {
+  search(query: string, page: number = 1) {
     return this.t.paginated<Coupon>(
       `${this.baseUrl}/search/${encodeURIComponent(query)}?Page=${page}`,
     );

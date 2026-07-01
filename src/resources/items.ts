@@ -23,7 +23,7 @@ export class ItemsResource {
   clear() {
     return this.t.request<void>(this.baseUrl + "/clear", { method: "DELETE" });
   }
-  search(query: string, page: number = 0) {
+  search(query: string, page: number = 1) {
     return this.t.paginated<LicenseKeySearchResult>(
       this.baseUrl + `/search/${encodeURIComponent(query)}?Page=${page}`,
     );

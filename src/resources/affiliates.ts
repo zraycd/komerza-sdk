@@ -1,6 +1,5 @@
 import type { components } from "../generated/schema.js";
 import type { Transport } from "../client.js";
-import { Affiliate } from "./affiliate.js";
 
 type DisplayAffiliate = components["schemas"]["DisplayAffiliate"];
 type AffiliateDashboardStats = components["schemas"]["AffiliateDashboardStats"];
@@ -74,7 +73,7 @@ export class AffiliatesResource {
     const qs = params.toString();
     return this.t.paginated<DisplayAffiliate>(qs ? `${this.baseUrl}?${qs}` : this.baseUrl);
   }
-  search(query: string, page: number = 0) {
+  search(query: string, page: number = 1) {
     const params = new URLSearchParams();
     params.set("query", query);
     params.set("Page", String(page));
@@ -94,9 +93,5 @@ export class AffiliatesResource {
       method: "POST",
       body: JSON.stringify(form),
     });
-  }
-
-  affiliate(customerId: string): Affiliate {
-    return new Affiliate(this.t, this.storeId, customerId);
   }
 }

@@ -44,7 +44,7 @@ export class CustomersResource {
   filters() {
     return this.t.request<Record<string, number>>(`${this.baseUrl}/filters`);
   }
-  search(query: string, page: number = 0) {
+  search(query: string, page: number = 1) {
     return this.t.paginated<PublicCustomerReference>(
       `${this.baseUrl}/search/${encodeURIComponent(query)}?Page=${page}`,
     );
