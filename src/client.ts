@@ -3,6 +3,8 @@ import type { KomerzaErrorCode } from "./errors.js";
 import { StoresResource } from "./resources/stores.js";
 import { UserResource } from "./resources/user.js";
 import { Store } from "./resources/store.js";
+import { WebhooksResource } from "./resources/webhooks.js";
+import { Webhook } from "./resources/webhook.js";
 
 type ApiResponse<T> = { success: boolean; message: string | null; code: string | null; data?: T };
 export type Paginated<T> = {
@@ -44,6 +46,7 @@ export class KomerzaClient {
   private t: Transport;
   public user: UserResource;
   public stores: StoresResource;
+  public webhooks: WebhooksResource;
 
   constructor(config: ClientConfig) {
     this.apiKey = config.apiKey;
@@ -57,6 +60,7 @@ export class KomerzaClient {
     this.t = transport;
     this.user = new UserResource(transport);
     this.stores = new StoresResource(transport);
+    this.webhooks = new WebhooksResource(transport);
   }
 
   private async send<E extends { success: boolean; message: string | null; code: string | null }>(
@@ -120,6 +124,10 @@ export class KomerzaClient {
 
   store(storeId: string): Store {
     return new Store(this.t, storeId);
+  }
+
+  webhook(webhookId: string): Webhook {
+    return new Webhook(this.t, webhookId);
   }
 }
 

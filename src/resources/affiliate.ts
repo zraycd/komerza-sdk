@@ -8,12 +8,14 @@ type PublicOrder = components["schemas"]["PublicOrder"];
 
 export class Affiliate {
   private baseUrl: string;
+  public payouts: AffiliatePayoutsResource;
   constructor(
     private t: Transport,
     private storeId: string,
     private customerId: string,
   ) {
     this.baseUrl = `/stores/${this.storeId}/affiliates/${this.customerId}`;
+    this.payouts = new AffiliatePayoutsResource(this.t, this.baseUrl + "/payouts");
   }
   enroll(form: AffiliateForm) {
     return this.t.request<AffiliateDto>(this.baseUrl, {
@@ -35,8 +37,5 @@ export class Affiliate {
   }
   orders(page: number = 1, limit: number = 20) {
     return this.t.paginated<PublicOrder>(`${this.baseUrl}/orders/${page}?limit=${limit}`);
-  }
-  payouts(): AffiliatePayoutsResource {
-    return new AffiliatePayoutsResource(this.t, this.baseUrl + "/payouts");
   }
 }
