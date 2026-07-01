@@ -10,7 +10,16 @@ type BulkUpdateProductForm = components["schemas"]["BulkUpdateProductForm"];
 type OrderedItem = components["schemas"]["OrderedItem"];
 type BulkDeleteProductForm = components["schemas"]["BulkDeleteProductForm"];
 
-interface ProductSearchOptions {
+type ListProductsQuery = {
+  visibility?: Privacy;
+  isBestSeller?: boolean;
+  shouldBlockVpns?: boolean;
+  lowStock?: boolean;
+  page?: number;
+  pageSize?: number;
+};
+
+type ProductSearchOptions = {
   visibility?: Privacy;
   isBestSeller?: boolean;
   shouldBlockVpns?: boolean;
@@ -19,7 +28,7 @@ interface ProductSearchOptions {
   sorts?: string;
   page?: number;
   pageSize?: number;
-}
+};
 
 export class ProductsResource {
   constructor(
@@ -27,9 +36,22 @@ export class ProductsResource {
     private storeId: string,
   ) {}
 
-  list() {
-    return this.t.paginated<DisplayProduct>(`/stores/${this.storeId}/products`);
+  list(query: ListProductsQuery = {}) {
+    const params = new URLSearchParams();
+    if (query.visibility !== undefined) params.set("Visibility", String(query.visibility));
+    if (query.isBestSeller !== undefined) params.set("IsBestSeller", String(query.isBestSeller));
+    if (query.shouldBlockVpns !== undefined)
+      params.set("ShouldBlockVpns", String(query.shouldBlockVpns));
+    if (query.lowStock !== undefined) params.set("LowStock", String(query.lowStock));
+    if (query.page !== undefined) params.set("Page", String(query.page));
+    if (query.pageSize !== undefined) params.set("PageSize", String(query.pageSize));
+
+    const qs = params.toString();
+    return this.t.paginated<DisplayProduct>(
+      qs ? `/stores/${this.storeId}/products?${qs}` : `/stores/${this.storeId}/products`,
+    );
   }
+
   all() {
     return this.t.request<PublicProductReference[]>(`/stores/${this.storeId}/products/all`);
   }

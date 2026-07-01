@@ -6,14 +6,26 @@ type PublicCategory = components["schemas"]["PublicCategory"];
 type CategoryForm = components["schemas"]["CategoryForm"];
 type OrderedItem = components["schemas"]["OrderedItem"];
 
+type ListCategoriesQuery = {
+  page?: number;
+  pageSize?: number;
+};
+
 export class CategoriesResource {
   constructor(
     private t: Transport,
     private storeId: string,
   ) {}
 
-  list() {
-    return this.t.paginated<PublicCategoryReference>(`/stores/${this.storeId}/categories`);
+  list(query: ListCategoriesQuery = {}) {
+    const params = new URLSearchParams();
+    if (query.page !== undefined) params.set("Page", String(query.page));
+    if (query.pageSize !== undefined) params.set("PageSize", String(query.pageSize));
+
+    const qs = params.toString();
+    return this.t.paginated<PublicCategoryReference>(
+      qs ? `/stores/${this.storeId}/categories?${qs}` : `/stores/${this.storeId}/categories`,
+    );
   }
   all() {
     return this.t.request<PublicCategoryReference[]>(`/stores/${this.storeId}/categories/all`);
